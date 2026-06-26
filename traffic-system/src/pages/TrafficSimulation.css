@@ -1,0 +1,402 @@
+.traffic-simulation {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #0a0e1a 0%, #1a1f2e 100%);
+  color: #fff;
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+}
+
+/* Header */
+.ts-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem 2rem;
+  background: rgba(0, 0, 0, 0.3);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.ts-header-left h1 {
+  margin: 0;
+  font-size: 1.75rem;
+  font-weight: 700;
+  background: linear-gradient(90deg, #00d4ff, #00ff88);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.ts-status {
+  margin-top: 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.ts-status.online {
+  color: #22c55e;
+}
+
+.ts-status.offline {
+  color: #ef4444;
+}
+
+.ts-header-right {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.ts-mode-indicator {
+  padding: 0.5rem 1rem;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  font-weight: 500;
+}
+
+.ts-mode-indicator .ai-mode {
+  color: #00ff88;
+  font-weight: 700;
+}
+
+.ts-mode-indicator .static-mode {
+  color: #fbbf24;
+  font-weight: 700;
+}
+
+.ts-emergency-btn {
+  padding: 0.5rem 1rem;
+  background: #dc2626;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
+}
+
+/* Tabs */
+.ts-tabs {
+  display: flex;
+  gap: 0.5rem;
+  padding: 1rem 2rem;
+  background: rgba(0, 0, 0, 0.2);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.ts-tabs button {
+  padding: 0.75rem 1.5rem;
+  background: transparent;
+  color: rgba(255, 255, 255, 0.7);
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.2s;
+}
+
+.ts-tabs button:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+}
+
+.ts-tabs button.active {
+  background: rgba(0, 212, 255, 0.2);
+  color: #00d4ff;
+}
+
+/* Dashboard */
+.ts-dashboard {
+  padding: 2rem;
+}
+
+.ts-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.ts-stat-card {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 1.5rem;
+  text-align: center;
+}
+
+.ts-stat-value {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #00d4ff;
+  margin-bottom: 0.5rem;
+}
+
+.ts-stat-label {
+  font-size: 0.875rem;
+  color: rgba(255, 255, 255, 0.6);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.ts-control-panel {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.ts-control-panel h3 {
+  margin: 0 0 1rem 0;
+  font-size: 1.25rem;
+  color: #00d4ff;
+}
+
+.ts-mode-buttons {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.ts-mode-buttons button {
+  flex: 1;
+  padding: 1rem;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  background: transparent;
+  color: #fff;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.2s;
+}
+
+.ts-mode-buttons button:hover {
+  border-color: #00d4ff;
+}
+
+.ts-mode-buttons button.active {
+  background: rgba(0, 212, 255, 0.2);
+  border-color: #00d4ff;
+  color: #00d4ff;
+}
+
+.ts-mode-description {
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 0.875rem;
+  margin: 0;
+}
+
+.ts-lanes-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+}
+
+.ts-lane-card {
+  background: rgba(255, 255, 255, 0.05);
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 1.5rem;
+  transition: all 0.3s;
+}
+
+.ts-lane-card.green {
+  border-color: #22c55e;
+  box-shadow: 0 0 20px rgba(34, 197, 94, 0.3);
+}
+
+.ts-lane-card.yellow {
+  border-color: #eab308;
+}
+
+.ts-lane-card.red {
+  border-color: #ef4444;
+}
+
+.ts-lane-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.ts-lane-header h4 {
+  margin: 0;
+  font-size: 1.125rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.ts-signal-light {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  box-shadow: 0 0 10px currentColor;
+}
+
+.ts-lane-stats {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.ts-lane-stat {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.ts-label {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.ts-value {
+  font-weight: 600;
+  font-size: 1.125rem;
+}
+
+.ts-vehicle-types {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.ts-type-badge {
+  padding: 0.25rem 0.75rem;
+  background: rgba(0, 212, 255, 0.2);
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+/* Detection Tab */
+.ts-detection {
+  padding: 2rem;
+}
+
+.ts-detection h2 {
+  margin: 0 0 1.5rem 0;
+  font-size: 1.5rem;
+  color: #00d4ff;
+}
+
+.ts-detection-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  gap: 1.5rem;
+}
+
+.ts-detection-card {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 1rem;
+}
+
+.ts-detection-card h4 {
+  margin: 0 0 1rem 0;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-size: 0.875rem;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.ts-video-container {
+  aspect-ratio: 16 / 9;
+  background: #000;
+  border-radius: 8px;
+  overflow: hidden;
+  margin-bottom: 1rem;
+}
+
+.ts-detection-frame {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.ts-no-video {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ts-loading {
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 0.875rem;
+}
+
+.ts-detection-info {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.875rem;
+}
+
+/* Logs Tab */
+.ts-logs {
+  padding: 2rem;
+}
+
+.ts-logs h2 {
+  margin: 0 0 1.5rem 0;
+  font-size: 1.5rem;
+  color: #00d4ff;
+}
+
+.ts-logs-container {
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 12px;
+  padding: 1rem;
+  max-height: 500px;
+  overflow-y: auto;
+}
+
+.ts-no-logs {
+  text-align: center;
+  color: rgba(255, 255, 255, 0.5);
+  padding: 2rem;
+}
+
+.ts-log-entry {
+  display: flex;
+  gap: 1rem;
+  padding: 0.75rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  font-size: 0.875rem;
+}
+
+.ts-log-entry:last-child {
+  border-bottom: none;
+}
+
+.ts-log-time {
+  color: rgba(255, 255, 255, 0.5);
+  font-family: monospace;
+  flex-shrink: 0;
+}
+
+.ts-log-entry.success .ts-log-message {
+  color: #22c55e;
+}
+
+.ts-log-entry.error .ts-log-message {
+  color: #ef4444;
+}
+
+.ts-log-entry.warning .ts-log-message {
+  color: #fbbf24;
+}
+
+.ts-log-entry.emergency .ts-log-message {
+  color: #dc2626;
+  font-weight: 600;
+}

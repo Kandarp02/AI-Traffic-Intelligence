@@ -1,0 +1,12 @@
+{
+  "buildCommand": "cd traffic-system && npm install && npm run build",
+  "outputDirectory": "traffic-system/dist",
+  "installCommand": "cd traffic-system && npm install",
+  "framework": "vite",
+  "rewrites": [
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ]
+}

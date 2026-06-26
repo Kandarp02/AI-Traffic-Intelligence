@@ -26,68 +26,123 @@ The `vercel.json` file is configured to:
 - Output to `traffic-system/dist`
 - Handle client-side routing with rewrites
 
+## Render Backend Deployment
+
+### Node.js Backend (Static Mode)
+
+The Node.js backend can be deployed to Render in **STATIC mode only**. The AI mode requires Python backend integration which has resource limitations.
+
+### Prerequisites
+- Render account
+- GitHub repository connected to Render
+
+### Deployment Steps
+
+1. **Go to Render Dashboard**
+   - Visit [render.com](https://render.com)
+   - Click "New +"
+   - Select "Web Service"
+
+2. **Configure Node.js Service**
+   - Connect your GitHub repository
+   - Name: `traffic-node-backend`
+   - Runtime: Node
+   - Build Command: `cd backend/node && npm install`
+   - Start Command: `cd backend/node && npm start`
+   - Plan: Free
+
+3. **Environment Variables**
+   - `NODE_ENV`: `production`
+   - `NODE_API_PORT`: `5000`
+   - `DEFAULT_MODE`: `STATIC`
+   - `STATIC_CYCLE_TIME`: `30`
+   - `YELLOW_TIME`: `3`
+   - `PORT`: `5000`
+
+4. **Deploy**
+   - Click "Create Web Service"
+   - Wait for deployment to complete
+   - Copy the deployed URL (e.g., `https://traffic-node-backend.onrender.com`)
+
+### Alternative: Using render.yaml
+
+You can also deploy using the provided `render.yaml` file:
+
+1. Go to Render Dashboard
+2. Click "New +"
+3. Select "Blueprint"
+4. Connect your GitHub repository
+5. Render will automatically detect `render.yaml`
+6. Click "Apply"
+
 ## Backend Deployment Limitations
 
-### Node.js Backend (Socket.IO Server)
-**Current Issue:** The Node.js backend uses Socket.IO for real-time WebSocket connections, which requires a persistent server. Vercel serverless functions are not suitable for this.
-
-**Recommended Solutions:**
-1. **Render.com** - Free tier available, supports WebSocket connections
-2. **Railway.app** - Good for Node.js apps with WebSocket support
-3. **DigitalOcean App Platform** - Scalable option
-4. **AWS EC2** - Full control, but requires setup
-
 ### Python AI Backend (YOLOv8)
-**Current Issue:** The Python backend uses YOLOv8 for object detection and requires:
-- Persistent video processing
-- GPU/CPU resources for ML inference
-- Large model files (yolov8n.pt - 6.5MB)
-- Video files (83MB+)
+**Cannot be deployed to Render free tier** due to:
+- Large video files (83MB+ per video)
+- Heavy ML processing requirements
+- GPU/CPU resource limitations
+- Memory constraints for YOLOv8 model
 
-**Recommended Solutions:**
-1. **Render.com** - Supports Python with resource limits
-2. **Railway.app** - Good for Python ML workloads
-3. **Google Cloud Run** - Scalable container deployment
-4. **AWS Lambda + EFS** - For serverless ML inference (complex setup)
+**Recommended Solutions for Python Backend:**
+1. **Google Cloud Run** - Scalable container deployment with GPU support
+2. **AWS EC2** - Full control over resources
+3. **DigitalOcean Droplets** - Affordable VPS with good performance
+4. **Railway.app** - Paid tier supports ML workloads
 
-## Recommended Architecture for Production
+## Current Deployment Architecture
 
-For a production deployment, consider this architecture:
+For this project, the recommended architecture is:
 
 ```
 Frontend (Vercel)
     ↓
-Node.js Backend (Render/Railway) - Socket.IO server
-    ↓
-Python AI Backend (Render/Railway) - YOLOv8 processing
+Node.js Backend (Render - Static Mode Only)
 ```
 
-## Temporary Solution (Demo Mode)
+**Note:** The AI mode with YOLOv8 processing is not available in this deployment configuration due to resource constraints.
 
-For demonstration purposes without full backend deployment:
+## Frontend Configuration Update
 
-1. Deploy only the frontend to Vercel
-2. Use mock data in the frontend to simulate traffic detection
-3. Remove real-time Socket.IO connections temporarily
+After deploying the Node.js backend to Render, update the frontend to connect to it:
 
-## Environment Variables
+1. Find the Socket.IO connection in your React app
+2. Update the URL from `localhost:5000` to your Render URL
+3. Example: `https://traffic-node-backend.onrender.com`
 
-When deploying backends, set these environment variables:
+## Environment Variables Summary
 
-**Node.js Backend:**
-- `DEFAULT_MODE`: AI or STATIC
-- `STATIC_CYCLE_TIME`: 30 (seconds)
-- `YELLOW_TIME`: 3 (seconds)
-- `PYTHON_API_URL`: URL of Python backend
-- `NODE_API_PORT`: 5000
-
-**Python Backend:**
-- Model paths and video sources need to be configured appropriately
+**Node.js Backend (Render):**
+- `NODE_ENV`: `production`
+- `NODE_API_PORT`: `5000`
+- `DEFAULT_MODE`: `STATIC` (AI mode requires Python backend)
+- `STATIC_CYCLE_TIME`: `30`
+- `YELLOW_TIME`: `3`
+- `PORT`: `5000`
 
 ## Next Steps
 
-1. Deploy frontend to Vercel (can be done now)
-2. Choose hosting provider for Node.js backend
-3. Choose hosting provider for Python backend
-4. Update frontend API URLs to point to deployed backends
-5. Test end-to-end functionality
+1. ✅ Deploy frontend to Vercel
+2. ✅ Deploy Node.js backend to Render (static mode)
+3. Update frontend Socket.IO connection URL
+4. Test the deployed application
+5. For AI mode: Deploy Python backend to a cloud provider with ML support
+
+## Testing the Deployment
+
+1. Visit your Vercel frontend URL
+2. The traffic dashboard should load
+3. Traffic signals should operate in static mode
+4. Real-time updates should work via Socket.IO
+
+## Troubleshooting
+
+**Frontend not connecting to backend:**
+- Check that the Socket.IO URL matches your Render backend URL
+- Verify the backend is running (check Render dashboard)
+- Check browser console for connection errors
+
+**Backend deployment failing:**
+- Verify build and start commands in render.yaml
+- Check Render logs for specific error messages
+- Ensure all dependencies are in package.json

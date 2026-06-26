@@ -4,3 +4,5 @@ opencv-python
 ultralytics
 requests
 inference-sdk
+aiohttp
+python-dotenv
